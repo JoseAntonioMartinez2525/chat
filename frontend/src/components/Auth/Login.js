@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
-import { useState } from "react";
+import React, { useState } from 'react';
 import axios from "axios";
 import { useToast } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
@@ -11,8 +11,8 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const toast = useToast();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const history = useHistory();
@@ -40,12 +40,12 @@ const Login = () => {
       };
 
       const { data } = await axios.post(
-        'http://localhost:8000/api/login',
+        'http://localhost:5000/api/',
         { email, password },
         config
       );
 
-      // console.log(JSON.stringify(data));
+      console.log(JSON.stringify(data));
       toast({
         title: "Login Exitoso",
         status: "success",

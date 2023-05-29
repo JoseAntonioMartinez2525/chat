@@ -1,6 +1,6 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { FormControl, FormLabel, Input, VStack, InputGroup, InputRightElement, Button } from '@chakra-ui/react';
-import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
@@ -48,7 +48,7 @@ const Registro = () => {
         },
       };
       const { data } = await axios.post(
-        'http://localhost:8000/api/',
+        'http://localhost:5000/api/',
         {
           name,
           email,
