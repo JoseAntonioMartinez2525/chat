@@ -4,6 +4,7 @@ import { FormControl, FormLabel, Input, VStack, InputGroup, InputRightElement, B
 import { Redirect } from 'react-router-dom';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import User from '../User'; 
 
 const Registro = () => {
   const [name, setName] = useState('');
@@ -26,7 +27,6 @@ const Registro = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
   };
 
-
   const submitHandler = async () => {
     setPicLoading(true);
     if (!name || !email || !password || !confirmpassword) {
@@ -40,7 +40,7 @@ const Registro = () => {
       setPicLoading(false);
       return;
     }
-    console.log(name, email, password, pic);
+
     try {
       const config = {
         headers: {
@@ -48,7 +48,7 @@ const Registro = () => {
         },
       };
       const { data } = await axios.post(
-        'http://localhost:5000/api/',
+        'http://localhost:5000/api/user',
         {
           name,
           email,
@@ -57,15 +57,28 @@ const Registro = () => {
         },
         config
       );
-      console.log(data);
+
+      const newUser = new User({
+        name,
+        email,
+        password,
+        pic,
+      });
+
+      // Guardar el nuevo usuario en la base de datos
+      await newUser.save();
+
       NotificationManager.success('Registro exitoso', 'Éxito', 5000);
+      NotificationManager.success('Los datos se han guardado en MongoDB Atlas.', 'Éxito', 5000);
+
       localStorage.setItem('userInfo', JSON.stringify(data));
       setPicLoading(false);
       setRedirect(true);
-    } catch (error) {
-      NotificationManager.error('Ocurrió un error', error.response.data.message, 5000);
-      setPicLoading(false);
-    }
+} catch (error) {
+  const errorMessage = error.response.data.message || 'Ocurrió un error';
+  NotificationManager.error('Error', errorMessage, 5000);
+  setPicLoading(false);
+}
   };
 
   const postDetails = (pics) => {
@@ -74,7 +87,7 @@ const Registro = () => {
       NotificationManager.warning('Por favor, elija una imagen', '', 5000);
       return;
     }
-    console.log(pics);
+
     if (pics.type === 'image/jpeg' || pics.type === 'image/png') {
       const data = new FormData();
       data.append('file', pics);
@@ -107,6 +120,7 @@ const Registro = () => {
 
   return (
     <VStack spacing="5px">
+      {/* Formulario de registro */}
       <FormControl id="first-name" isRequired>
         <FormLabel>Nombre de usuario</FormLabel>
         <Input placeholder="Ingrese su nombre" value={name} onChange={(e) => setName(e.target.value)} />
