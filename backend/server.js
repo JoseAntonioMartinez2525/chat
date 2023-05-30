@@ -13,7 +13,7 @@ app.use(cors());
 
 dotenv.config();
 
-//MIDLEWARES
+// MIDLEWARES
 app.use(express.static("public"))
 app.use(express.json())
 
@@ -31,7 +31,7 @@ app.post('/api/user', async (req, res) => {
       password,
       pic,
     });
-        // Guardar el nuevo usuario en la base de datos
+    // Guardar el nuevo usuario en la base de datos
     await newUser.save();
 
     res.status(201).json(newUser);
@@ -59,8 +59,6 @@ app.get("/api/chat/:id", (req, res) => {
   } else {
     res.status(404).send("Chat no encontrado");
   }
-
-
 });
 
 app.post('/api/user', async (req, res) => {
